@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MessageCircle, Home, StickyNote } from "lucide-react";
+import { MessageCircle, Home, StickyNote, Users } from "lucide-react";
 
 export const Navigation = () => {
   const location = useLocation();
@@ -16,6 +16,7 @@ export const Navigation = () => {
           
           <div className="flex items-center space-x-8">
             <NavLink to="/" icon={<Home className="w-5 h-5" />} label="Home" active={location.pathname === "/"} />
+            <NavLink to="/select-character" icon={<Users className="w-5 h-5" />} label="Mentors" active={location.pathname === "/select-character"} />
             <NavLink to="/chat" icon={<MessageCircle className="w-5 h-5" />} label="Chat" active={location.pathname === "/chat"} />
             <NavLink 
               to="/notes" 
