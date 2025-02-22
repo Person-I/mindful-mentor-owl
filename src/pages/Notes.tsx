@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
-import { PlusCircle, Save, Trash2 } from "lucide-react";
+import { PlusCircle, Save, Trash2, Clock } from "lucide-react";
 import { Note } from "@/types/note";
 import { noteService } from "@/services/noteService";
 import { useToast } from "@/hooks/use-toast";
@@ -122,6 +122,17 @@ const Notes = () => {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <div className="h-[calc(100vh-5rem)] flex gap-4">
       {/* Sidebar */}
@@ -139,21 +150,27 @@ const Notes = () => {
           {notes.map((note) => (
             <div
               key={note.id}
-              className={`p-3 rounded-lg cursor-pointer flex items-center justify-between group ${
+              className={`p-3 rounded-lg cursor-pointer flex flex-col group ${
                 note.id === selectedNote?.id ? "bg-secondary" : "hover:bg-secondary/50"
               }`}
               onClick={() => navigate(`/notes/${note.id}`)}
             >
-              <span className="truncate">{note.title}</span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteNote(note.id);
-                }}
-                className="opacity-0 group-hover:opacity-100 p-1 hover:bg-background rounded transition-all"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+              <div className="flex items-center justify-between">
+                <span className="truncate font-medium">{note.title}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteNote(note.id);
+                  }}
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-background rounded transition-all"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="flex items-center gap-1 mt-1 text-xs text-foreground/60">
+                <Clock className="w-3 h-3" />
+                <span>{formatDate(note.updatedAt)}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -162,7 +179,11 @@ const Notes = () => {
       {/* Editor */}
       {selectedNote ? (
         <div className="flex-1 glass rounded-lg p-4 flex flex-col">
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <div className="text-sm text-foreground/60">
+              <div>Created: {formatDate(selectedNote.createdAt)}</div>
+              <div>Updated: {formatDate(selectedNote.updatedAt)}</div>
+            </div>
             <button
               onClick={updateNote}
               className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
