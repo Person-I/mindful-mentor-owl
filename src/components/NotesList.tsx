@@ -26,6 +26,11 @@ const NotesList: React.FC<NotesListProps> = ({ notes, selectedNoteId, onDeleteNo
     });
   };
 
+  const getTitleFromContent = (content: string) => {
+    const lines = content.split('\n');
+    return lines[0] || "Untitled";
+  };
+
   return (
     <div className={`w-64 glass rounded-lg p-4 flex flex-col ${isVisible ? 'block' : 'hidden'} md:block`}>
       <div className="flex items-center justify-between mb-4">
@@ -47,7 +52,7 @@ const NotesList: React.FC<NotesListProps> = ({ notes, selectedNoteId, onDeleteNo
             onClick={() => navigate(`/knowledge-base/${note.id}`)}
           >
             <div className="flex items-center justify-between">
-              <span className="truncate font-medium">{note.title}</span>
+              <span className="truncate font-medium">{getTitleFromContent(note.content)}</span>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -60,7 +65,7 @@ const NotesList: React.FC<NotesListProps> = ({ notes, selectedNoteId, onDeleteNo
             </div>
             <div className="flex items-center gap-1 mt-1 text-xs text-foreground/60">
               <Clock className="w-3 h-3" />
-              <span>{formatDate(note.updatedAt)}</span>
+              <span>{formatDate(note.updated_at)}</span>
             </div>
           </div>
         ))}

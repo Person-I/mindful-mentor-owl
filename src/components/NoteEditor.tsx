@@ -26,8 +26,8 @@ const NoteEditor = ({ note, content, hasChanges, onContentChange, onSave }: Note
     <div className="flex-1 glass rounded-lg p-4 flex flex-col">
       <div className="flex justify-between items-center mb-4">
         <div className="text-sm text-foreground/60">
-          <div>Created: {formatDate(note.createdAt)}</div>
-          <div>Updated: {formatDate(note.updatedAt)}</div>
+          <div>Created: {formatDate(note.created_at)}</div>
+          <div>Updated: {formatDate(note.updated_at)}</div>
         </div>
         <button
           onClick={onSave}

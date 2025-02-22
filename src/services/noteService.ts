@@ -23,36 +23,44 @@ export const noteService = {
     }
   },
 
-  async getNote(id: string): Promise<Note> {
+  async getNote(userId: string, id: string): Promise<Note> {
     try {
-      const response = await axios.get(`${API_URL}notes/${id}/`);
+      const response = await axios.get(`${API_URL}notes/${id}/`, {
+        params: { user_id: userId },
+      });
       return response.data;
     } catch (error) {
       handleApiError(error);
     }
   },
 
-  async createNote(data: Omit<Note, "id" | "createdAt" | "updatedAt">): Promise<Note> {
+  async createNote(userId: string, data: Omit<Note, "id" | "created_at" | "update_at">): Promise<Note> {
     try {
-      const response = await axios.post(`${API_URL}notes/`, data);
+      const response = await axios.post(`${API_URL}notes/`, {
+        ...data,
+        user_id: userId,
+      });
       return response.data;
     } catch (error) {
       handleApiError(error);
     }
   },
 
-  async updateNote(id: string, data: Partial<Omit<Note, "id" | "createdAt">>): Promise<Note> {
+  async updateNote(userId: string, id: string, data: Partial<Omit<Note, "id" | "created_at">>): Promise<Note> {
     try {
-      const response = await axios.put(`${API_URL}notes/${id}/`, data);
+      const response = await axios.put(`${API_URL}notes/${id}/`, {
+        ...data,
+        user_id: userId,
+      });
       return response.data;
     } catch (error) {
       handleApiError(error);
     }
   },
 
-  async deleteNote(id: string): Promise<void> {
+  async deleteNote(userId: string, id: string): Promise<void> {
     try {
-      await axios.delete(`${API_URL}notes/${id}/`);
+      await axios.delete(`${API_URL}notes/${id}/?user_id=${userId}`);
     } catch (error) {
       handleApiError(error);
     }

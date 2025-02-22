@@ -21,18 +21,20 @@ const Notes = () => {
   const userId = useUser().userId;
 
   useEffect(() => {
-    loadNotes();
-  }, []);
+    if (userId) {
+      loadNotes();
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (noteId) {
       if (noteId === 'new') {
         createNote();
-      } else {
+      } else if (userId) {
         loadNote(noteId);
       }
     }
-  }, [noteId]);
+  }, [noteId, userId]);
 
   useEffect(() => {
     if (selectedNote) {
@@ -73,7 +75,7 @@ const Notes = () => {
 
   const loadNote = async (id: string) => {
     try {
-      const note = await noteService.getNote(id);
+      const note = await noteService.getNote(userId, id);
       setSelectedNote(note);
       setContent(note.content);
       setHasChanges(false);
@@ -88,9 +90,9 @@ const Notes = () => {
 
   const createNote = async () => {
     try {
-      const newNote = await noteService.createNote({
-        title: "New Note",
+      const newNote = await noteService.createNote(userId, {
         content: "# New Note\n\nStart writing here...",
+        updated_at: ""
       });
       setNotes(prev => [newNote, ...prev]);
       navigate(`/knowledge-base/${newNote.id}`);
@@ -110,9 +112,8 @@ const Notes = () => {
   const updateNote = async () => {
     if (!selectedNote || !hasChanges) return;
     try {
-      const updated = await noteService.updateNote(selectedNote.id, {
+      const updated = await noteService.updateNote(userId, selectedNote.id, {
         content,
-        title: content.split('\n')[0].replace('# ', ''),
       });
       setNotes(prev => prev.map(n => n.id === updated.id ? updated : n));
       setSelectedNote(updated);
@@ -132,7 +133,7 @@ const Notes = () => {
 
   const deleteNote = async (id: string) => {
     try {
-      await noteService.deleteNote(id);
+      await noteService.deleteNote(userId, id);
       setNotes(prev => prev.filter(n => n.id !== id));
       if (selectedNote?.id === id) {
         const remainingNotes = notes.filter(n => n.id !== id);
