@@ -1,33 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { UserCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Character } from "@/types/character";
-
-const characters: Character[] = [
-  {
-    id: "1",
-    name: "Alex Thompson",
-    role: "Technical Mentor",
-    avatarUrl: "/placeholder.svg",
-  },
-  {
-    id: "2",
-    name: "Sarah Chen",
-    role: "Career Coach",
-    avatarUrl: "/placeholder.svg",
-  },
-  {
-    id: "3",
-    name: "Michael Roberts",
-    role: "Academic Advisor",
-    avatarUrl: "/placeholder.svg",
-  },
-];
+import { characters } from '@/data/characters'; // Import the characters array
+import { useCharacter } from "@/context/CharacterContext"; // Import the hook
 
 const CharacterSelect = () => {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { selectedId, setSelectedId } = useCharacter(); // Use the context
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -36,7 +17,7 @@ const CharacterSelect = () => {
     if (savedId) {
       setSelectedId(savedId);
     }
-  }, []);
+  }, [setSelectedId]);
 
   const handleSelect = (id: string) => {
     setSelectedId(id);
@@ -45,7 +26,7 @@ const CharacterSelect = () => {
       title: "Character Selected",
       description: "Your mentor preference has been saved.",
     });
-    setTimeout(() => navigate("/chat"), 1000);
+    setTimeout(() => navigate("/knowledge-base"), 1000);
   };
 
   return (

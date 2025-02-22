@@ -1,9 +1,10 @@
-
+import React, { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { ArrowRight, Brain, Sparkles, Target } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-12">
       <motion.div
@@ -19,10 +20,10 @@ const Index = () => {
           Get personalized guidance and support on your journey to success with our AI-powered mentoring platform.
         </p>
         <Link
-          to="/chat"
+          to="/select-character"
           className="inline-flex items-center px-6 py-3 text-lg font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
         >
-          Start Chatting <ArrowRight className="ml-2 h-5 w-5" />
+          Start Talking <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
       </motion.div>
 
@@ -39,8 +40,8 @@ const Index = () => {
         />
         <FeatureCard
           icon={<Target className="w-6 h-6" />}
-          title="Goal Tracking"
-          description="Set and track your progress with actionable milestones"
+          title="Personalized assitant"
+          description="Select the character and attitude of assistant tailored to your needs"
         />
         <FeatureCard
           icon={<Sparkles className="w-6 h-6" />}

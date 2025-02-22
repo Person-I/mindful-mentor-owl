@@ -17,12 +17,12 @@ export const Navigation = () => {
           <div className="flex items-center space-x-8">
             <NavLink to="/" icon={<Home className="w-5 h-5" />} label="Home" active={location.pathname === "/"} />
             <NavLink to="/select-character" icon={<Users className="w-5 h-5" />} label="Mentors" active={location.pathname === "/select-character"} />
-            <NavLink to="/chat" icon={<MessageCircle className="w-5 h-5" />} label="Chat" active={location.pathname === "/chat"} />
+            {/* <NavLink to="/chat" icon={<MessageCircle className="w-5 h-5" />} label="Chat" active={location.pathname === "/chat"} /> */}
             <NavLink 
-              to="/notes" 
+              to="/knowledge-base" 
               icon={<StickyNote className="w-5 h-5" />} 
-              label="Notes" 
-              active={location.pathname.startsWith("/notes")} 
+              label="Knowledge Base" 
+              active={location.pathname.startsWith("/knowledge-base")} 
             />
           </div>
         </div>
