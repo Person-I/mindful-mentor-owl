@@ -11,7 +11,7 @@ export const Navigation = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-xl font-semibold">
-            MindfulMentor
+            PersonAI
           </Link>
           
           <div className="flex items-center space-x-8">

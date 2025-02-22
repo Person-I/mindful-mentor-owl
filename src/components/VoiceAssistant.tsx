@@ -62,31 +62,31 @@ export function VoiceAssistant() {
   }, [conversation, toast]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div
-        className={`fixed bottom-4 right-4 p-4 rounded-lg shadow-lg flex items-center gap-2 cursor-pointer transition-colors ${
-          convStatus === 'connected' ? 'bg-red-500 hover:bg-red-600 wave-animation' : 'bg-blue-500 hover:bg-blue-600'
-        }`}
-        onClick={toggleConversation}
-      >
-        {character && (
-          <div className="w-8 h-8 rounded-full overflow-hidden bg-secondary">
-            <img
-              src={character.avatarUrl}
-              alt={character.name}
-              className="w-full h-full object-cover"
-            />
+    <>
+      {character && (
+        <div className="flex flex-col items-center gap-4">
+          <div
+            className={`fixed bottom-4 right-4 p-4 rounded-lg shadow-lg flex items-center gap-2 cursor-pointer transition-colors ${
+              convStatus === 'connected' ? 'bg-red-500 hover:bg-red-600 wave-animation' : 'bg-blue-500 hover:bg-blue-600'
+            }`}
+            onClick={toggleConversation}
+          >
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-secondary">
+              <img
+                src={character.avatarUrl}
+                alt={character.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <span className="icon-wrapper">
+              {/* {convStatus === 'connected' ? <MicOff size={24} className="hover-icon" /> : <Mic size={24} />} */}
+            </span>
+            <span className="text-sm font-medium">
+              {convStatus === 'connected' ? 'Talking to ' + character.name : 'Talk to ' + character.name}
+            </span>
           </div>
-        )}
-        <span className="icon-wrapper">
-          {/* {convStatus === 'connected' ? <MicOff size={24} className="hover-icon" /> : <Mic size={24} />} */}
-        </span>
-        {character && (
-          <span className="text-sm font-medium">
-            {convStatus === 'connected' ? 'Talking to ' + character.name : 'Talk to ' + character.name}
-          </span>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }

@@ -5,7 +5,7 @@ import { Note } from "@/types/note";
 let notes: Note[] = [
   {
     id: "1",
-    title: "Welcome to MindfulMentor Notes",
+    title: "Welcome to PersonAI Notes",
     content: "# Welcome!\n\nThis is your first note. You can edit it or create new ones.",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
