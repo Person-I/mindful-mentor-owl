@@ -50,16 +50,19 @@ export function VoiceAssistant() {
       } else {
         // Request microphone permission
         await navigator.mediaDevices.getUserMedia({ audio: true });
-
+        console.log(character);
         // Start the conversation with your agent
         await conversation.startSession({
           agentId: 'BoXuSDsm0Qq78Gp3aMFA',
           dynamicVariables: {
-            agent_name: character.name
+            agent_name: character.name,
+            keyFeatures: character.keyFeatures.join(', '),
+            context: 'Yesterday I had a meeting with very important VC investor.'
           },
           overrides: {
-            voiceId: character.voiceId,
-            keyFeatures: character.keyFeatures,
+            tts: {
+              voiceId: character.voiceId,
+            },
           },
         });
       }

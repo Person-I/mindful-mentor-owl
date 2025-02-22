@@ -7,6 +7,7 @@ import NoteEditor from "@/components/NoteEditor";
 import { Toaster } from "@/components/ui/toaster";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
 import NotesList from "@/components/NotesList";
+import { useUser } from "@/context/UserIDContext";
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -17,6 +18,7 @@ const Notes = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isListVisible, setIsListVisible] = useState(true);
+  const userId = useUser().userId;
 
   useEffect(() => {
     loadNotes();
@@ -55,7 +57,7 @@ const Notes = () => {
 
   const loadNotes = async () => {
     try {
-      const data = await noteService.getNotes();
+      const data = await noteService.getNotes(userId);
       setNotes(data);
       if (data.length && !noteId) {
         navigate(`/knowledge-base/${data[0].id}`);

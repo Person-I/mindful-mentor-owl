@@ -6,7 +6,7 @@ export const characters: Character[] = [
     name: "Vlad Drakula",
     role: "Technical Mentor",
     avatarUrl: "/mentor_a.jpeg",
-    voiceId: "XjdmlV0OFXfXE6Mg2Sb7",
+    voiceId: "e5WNhrdI30aXpS2RSGm1",
     keyFeatures: ["Engineering-like approach", "Detailed explanations", "Real-world examples", "Slight criticism"],
   },
   {
@@ -14,7 +14,7 @@ export const characters: Character[] = [
     name: "Pamela Anderson",
     role: "Career Coach",
     avatarUrl: "/mentor_b.jpeg",
-    voiceId: "nDJIICjR9zfJExIFeSCN",
+    voiceId: "56AoDkrOh6qfVPDXZ7Pt",
     keyFeatures: ["Positive and encouraging", "inquisitive", "pays attention to details"],
   },
   {
@@ -22,7 +22,7 @@ export const characters: Character[] = [
     name: "Stevenson Jobson",
     role: "Academic Advisor",
     avatarUrl: "/mentor_c.jpeg",
-    voiceId: "zpnRoleXRhWcv8KmQc0N",
+    voiceId: "ljo9gAlSqKOvF6D8sOsX",
     keyFeatures: ["Inspiring", "Psychology-oriented", "Goal focused"],
   },
 ]; 
