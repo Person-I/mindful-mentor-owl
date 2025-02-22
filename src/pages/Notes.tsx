@@ -11,6 +11,7 @@ const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [content, setContent] = useState<string>("");
+  const [hasChanges, setHasChanges] = useState(false);
   const { noteId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -24,6 +25,12 @@ const Notes = () => {
       loadNote(noteId);
     }
   }, [noteId]);
+
+  useEffect(() => {
+    if (selectedNote) {
+      setHasChanges(content !== selectedNote.content);
+    }
+  }, [content, selectedNote]);
 
   const loadNotes = async () => {
     try {
@@ -46,6 +53,7 @@ const Notes = () => {
       const note = await noteService.getNote(id);
       setSelectedNote(note);
       setContent(note.content);
+      setHasChanges(false);
     } catch (error) {
       toast({
         title: "Error",
@@ -77,13 +85,15 @@ const Notes = () => {
   };
 
   const updateNote = async () => {
-    if (!selectedNote) return;
+    if (!selectedNote || !hasChanges) return;
     try {
       const updated = await noteService.updateNote(selectedNote.id, {
         content,
         title: content.split('\n')[0].replace('# ', ''),
       });
       setNotes(prev => prev.map(n => n.id === updated.id ? updated : n));
+      setSelectedNote(updated);
+      setHasChanges(false);
       toast({
         title: "Success",
         description: "Note updated successfully",
@@ -186,7 +196,11 @@ const Notes = () => {
             </div>
             <button
               onClick={updateNote}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+              disabled={!hasChanges}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
+                ${hasChanges 
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+                  : "bg-secondary text-secondary-foreground cursor-not-allowed"}`}
             >
               <Save className="w-4 h-4" />
               Save
