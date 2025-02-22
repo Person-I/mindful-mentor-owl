@@ -12,17 +12,17 @@ export function VoiceAssistant() {
   const { toast } = useToast();
   const { selectedId } = useCharacter(); // Use the useCharacter hook to get selectedId
   const conversation = useConversation({
-    onConnect: () => {
-      console.log('Connected');
-      toast({ title: 'Connected', description: 'You are now connected to the agent.' });
-    },
-    onDisconnect: () => {
-      console.log('Disconnected');
-      toast({ title: 'Disconnected', description: 'You have been disconnected from the agent.' });
-    },
+    // onConnect: () => {
+    //   console.log('Connected');
+    //   toast({ title: 'Connected', description: 'You are now connected to the agent.' });
+    // },
+    // onDisconnect: () => {
+    //   console.log('Disconnected');
+    //   toast({ title: 'Disconnected', description: 'You have been disconnected from the agent.' });
+    // },
     onMessage: (message) => {
       console.log('Message:', message);
-      toast({ title: 'New Message', description: `Message received: ${message}` });
+      // toast({ title: 'New Message', description: `Message received: ${message}` });
     },
     onError: (error) => {
       console.error('Error:', error);
@@ -52,7 +52,10 @@ export function VoiceAssistant() {
 
         // Start the conversation with your agent
         await conversation.startSession({
-          agentId: 'agent_id'
+          agentId: 'BoXuSDsm0Qq78Gp3aMFA',
+          dynamicVariables: {
+            agent_name: character.name,
+          },
         });
       }
     } catch (error) {

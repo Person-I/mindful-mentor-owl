@@ -1,0 +1,1 @@
+export const API_URL = 'https://person-i-backend-git-main-cjacas-projects.vercel.app/api/';

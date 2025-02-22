@@ -9,11 +9,11 @@ interface NotesListProps {
   notes: Note[];
   selectedNoteId: string | null;
   onDeleteNote: (id: string) => void;
+  isVisible: boolean;
 }
 
-const NotesList: React.FC<NotesListProps> = ({ notes, selectedNoteId, onDeleteNote }) => {
+const NotesList: React.FC<NotesListProps> = ({ notes, selectedNoteId, onDeleteNote, isVisible }) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -27,7 +27,7 @@ const NotesList: React.FC<NotesListProps> = ({ notes, selectedNoteId, onDeleteNo
   };
 
   return (
-    <div className="w-64 glass rounded-lg p-4 flex flex-col">
+    <div className={`w-64 glass rounded-lg p-4 flex flex-col ${isVisible ? 'block' : 'hidden'} md:block`}>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Notes</h2>
         <button

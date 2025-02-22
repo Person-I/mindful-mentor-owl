@@ -7,6 +7,7 @@ import NoteEditor from "@/components/NoteEditor";
 import { Toaster } from "@/components/ui/toaster";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
 import NotesList from "@/components/NotesList";
+import { useUserID } from "@/context/UserIDContext";
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -16,6 +17,7 @@ const Notes = () => {
   const { noteId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isListVisible, setIsListVisible] = useState(true);
 
   useEffect(() => {
     loadNotes();
@@ -23,7 +25,11 @@ const Notes = () => {
 
   useEffect(() => {
     if (noteId) {
-      loadNote(noteId);
+      if (noteId === 'new') {
+        createNote();
+      } else {
+        loadNote(noteId);
+      }
     }
   }, [noteId]);
 
@@ -33,6 +39,20 @@ const Notes = () => {
     }
   }, [content, selectedNote]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsListVisible(false);
+      } else {
+        setIsListVisible(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const loadNotes = async () => {
     try {
@@ -147,13 +167,22 @@ const Notes = () => {
 
 
   return (
-    <div className="h-[calc(100vh-5rem)] flex gap-4">
-      {/* Sidebar */}
+    <div className="h-[calc(100vh-5rem)] flex flex-col md:flex-row gap-4">
       <Toaster />
+
+      {/* Toggle button for mobile */}
+      <button
+        className="md:hidden p-2 bg-primary text-primary-foreground rounded-lg"
+        onClick={() => setIsListVisible(!isListVisible)}
+      >
+        {isListVisible ? 'Hide Notes' : 'Show Notes'}
+      </button>
+
       <NotesList
         notes={notes}
         selectedNoteId={selectedNote?.id || null}
         onDeleteNote={deleteNote}
+        isVisible={isListVisible}
       />
 
       {/* Editor */}

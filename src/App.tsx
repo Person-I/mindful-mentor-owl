@@ -5,22 +5,25 @@ import Index from "./pages/Index";
 import Notes from "./pages/Notes";
 import CharacterSelect from "./pages/CharacterSelect";
 import { CharacterProvider } from "./context/CharacterContext";
+import { UserIDProvider } from "./context/UserIDContext";
 
 const App = () => {
   return (
-    <CharacterProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Index />} />
-            {/* <Route path="/chat" element={<Chat />} /> */}
-            <Route path="/knowledge-base" element={<Notes />} />
-            <Route path="/knowledge-base/:noteId" element={<Notes />} />
-            <Route path="/select-character" element={<CharacterSelect />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </CharacterProvider>
+    <UserIDProvider>
+      <CharacterProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Index />} />
+              {/* <Route path="/chat" element={<Chat />} /> */}
+              <Route path="/knowledge-base" element={<Notes />} />
+              <Route path="/knowledge-base/:noteId" element={<Notes />} />
+              <Route path="/select-character" element={<CharacterSelect />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </CharacterProvider>
+    </UserIDProvider>
   );
 };
 
