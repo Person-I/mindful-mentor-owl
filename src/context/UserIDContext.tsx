@@ -1,40 +1,49 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
-// Create a context for the user ID
-const UserIDContext = createContext<string | undefined>(undefined);
+interface UserContextValue {
+  userId: string;
+}
 
-// Function to generate a random string
-const generateRandomID = () => {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+const UserContext = createContext<UserContextValue | undefined>(undefined);
+
+interface UserProviderProps {
+  children: React.ReactNode;
+}
+
+const generateRandomString = (length: number = 8): string => {
+  return Math.random().toString(36).substring(2, 2 + length);
 };
 
-// Create a provider component
-export const UserIDProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [userID, setUserID] = useState<string | undefined>(undefined);
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const [userId, setUserId] = useState<string>('');
 
   useEffect(() => {
-    // Check if a user ID is already stored in local storage
-    let storedUserID = localStorage.getItem('userID');
-    if (!storedUserID) {
-      // If not, generate a new one and save it
-      storedUserID = generateRandomID();
-      localStorage.setItem('userID', storedUserID);
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      const newUserId = generateRandomString();
+      localStorage.setItem('userId', newUserId);
+      setUserId(newUserId);
     }
-    setUserID(storedUserID);
   }, []);
 
   return (
-    <UserIDContext.Provider value={userID}>
+    <UserContext.Provider value={{ userId }}>
       {children}
-    </UserIDContext.Provider>
+    </UserContext.Provider>
   );
 };
 
-// Custom hook to use the UserIDContext
-export const useUserID = () => {
-  const context = useContext(UserIDContext);
-  if (context === undefined) {
-    throw new Error('useUserID must be used within a UserIDProvider');
+/**
+ * Custom hook to access the UserContext
+ * Usage example:
+ *    const { userId } = useUser();
+ */
+export const useUser = (): UserContextValue => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within a UserProvider');
   }
   return context;
-}; 
+};

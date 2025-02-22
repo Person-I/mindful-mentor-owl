@@ -5,11 +5,11 @@ import Index from "./pages/Index";
 import Notes from "./pages/Notes";
 import CharacterSelect from "./pages/CharacterSelect";
 import { CharacterProvider } from "./context/CharacterContext";
-import { UserIDProvider } from "./context/UserIDContext";
+import { UserProvider } from "./context/UserIDContext";
 
 const App = () => {
   return (
-    <UserIDProvider>
+    <UserProvider>
       <CharacterProvider>
         <BrowserRouter>
           <Routes>
@@ -23,7 +23,7 @@ const App = () => {
           </Routes>
         </BrowserRouter>
       </CharacterProvider>
-    </UserIDProvider>
+    </UserProvider>
   );
 };
 

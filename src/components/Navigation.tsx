@@ -2,11 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MessageCircle, Home, StickyNote, Users } from "lucide-react";
 import { useState } from "react";
-import { useUserID } from "@/context/UserIDContext";
+import { useUser } from "@/context/UserIDContext";
 
 export const Navigation = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const userId = useUser();
+
   return (
     <nav className="sticky top-0 z-50 glass">
       <div className="container mx-auto px-4 py-4">
@@ -14,7 +16,7 @@ export const Navigation = () => {
           <Link to="/" className="text-xl font-semibold">
             PersonAI
           </Link>
-          
+          {userId.userId}
           <button
             className="block md:hidden text-xl"
             onClick={() => setIsMenuOpen(!isMenuOpen)}

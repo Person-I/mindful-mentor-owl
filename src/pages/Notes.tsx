@@ -7,7 +7,6 @@ import NoteEditor from "@/components/NoteEditor";
 import { Toaster } from "@/components/ui/toaster";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
 import NotesList from "@/components/NotesList";
-import { useUserID } from "@/context/UserIDContext";
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);

@@ -7,6 +7,7 @@ import { Mic, MicOff } from 'lucide-react';
 import './VoiceAssistant.css'; // Import the CSS file for styles
 import { characters } from '@/data/characters'; // Import the characters array
 import { useCharacter } from '@/context/CharacterContext'; // Import the useCharacter hook
+import { Character } from '@/types/character';
 
 export function VoiceAssistant() {
   const { toast } = useToast();
@@ -31,13 +32,13 @@ export function VoiceAssistant() {
   });
   const convStatus = conversation.status;
 
-  const [character, setCharacter] = useState<{ name: string; avatarUrl: string } | null>(null);
+  const [character, setCharacter] = useState<Character| null>(null);
 
   useEffect(() => {
     if (selectedId) {
       const selectedCharacter = characters.find(c => c.id === selectedId);
       if (selectedCharacter) {
-        setCharacter({ name: selectedCharacter.name, avatarUrl: selectedCharacter.avatarUrl });
+        setCharacter(selectedCharacter);
       }
     }
   }, [selectedId]); // Add selectedId as a dependency
@@ -54,7 +55,11 @@ export function VoiceAssistant() {
         await conversation.startSession({
           agentId: 'BoXuSDsm0Qq78Gp3aMFA',
           dynamicVariables: {
-            agent_name: character.name,
+            agent_name: character.name
+          },
+          overrides: {
+            voiceId: character.voiceId,
+            keyFeatures: character.keyFeatures,
           },
         });
       }
