@@ -11,7 +11,19 @@ import { Character } from '@/types/character';
 import { useUser } from '@/context/UserIDContext';
 import { historyService } from '@/services/historyService';
 
-export function VoiceAssistant() {
+interface CVAnalysis {
+  id: number;
+  user_id: string;
+  summary: string;
+  text: string;
+  created_at: string;
+}
+
+interface VoiceAssistantProps {
+  cvAnalysis: CVAnalysis | null;
+}
+
+export function VoiceAssistant({ cvAnalysis }: VoiceAssistantProps) {
   const { toast } = useToast();
   const { selectedId } = useCharacter();
   const userId = useUser().userId;
@@ -122,7 +134,7 @@ export function VoiceAssistant() {
           dynamicVariables: {
             agent_name: character.name,
             keyFeatures: character.keyFeatures.join(', '),
-            context: `Previous conversations:\n${conversationHistory}`,
+            context: `Previous conversations:\n${conversationHistory}\n${cvAnalysis ? `CV Analysis:\n${cvAnalysis.summary}` : ''}`,
             user_id: userId
           },
           overrides: {
@@ -136,7 +148,7 @@ export function VoiceAssistant() {
       console.error('Failed to toggle conversation:', error);
       toast({ title: 'Error', description: `Failed to toggle conversation.\n ${error.reason}` });
     }
-  }, [conversation, toast, character, userId, conversationHistory]);
+  }, [conversation, toast, character, userId, conversationHistory, cvAnalysis]);
 
   const endConversation = useCallback(async () => {
     if (convStatus === 'connected') {
@@ -148,60 +160,10 @@ export function VoiceAssistant() {
     <>
       {character && (
         <div className="">
-          {
-            convStatus === 'connected' ? (
-              <div
-                className="fixed max-w-[300px] bottom-4 right-4 p-4 rounded-lg shadow-lg flex flex-col items-center gap-2 transition-colors cursor-pointer bg-gradient-to-r from-indigo-500 to-indigo-800 wave-animation"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full overflow-hidden bg-secondary border-white border-2">
-                    <img
-                      src={character.avatarUrl}
-                      alt={character.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <span className="text-sm font-medium">
-                    Talking to {character.name}
-                  </span>
-                </div>
-                {(
-                  <div
-                    ref={chatContainerRef}
-                    className="chat-container mt-4 w-full max-h-64 overflow-y-auto bg-secondary rounded-lg p-2 min-h-64"
-                  >
-                    {messages.map((msg, index) => (
-                      <div
-                        key={index}
-                        className={`${msg.source === 'ai' ? 'bg-gray-600 mr-12' : 'bg-indigo-600 ml-12'} p-2 rounded-lg mb-2`}
-                      >
-                        {msg.message}
-                      </div>
-                    ))}
-                    {
-                      messages.length > 0 && messages[messages.length - 1].source === 'user' && (
-                        <div className="bg-gray-600 p-2 rounded-lg mb-2 animate-pulse w-8">
-                          ...
-                        </div>
-                      )
-                    }
-                  </div>
-                )}
-                {(
-                  <button
-                    className="mt-2 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 ml-auto"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      endConversation();
-                    }}
-                  >
-                    End Conversation
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div onClick={startConversation} className="flex items-center gap-2 fixed max-w-[300px] bottom-4 right-4 p-4 rounded-lg shadow-lg flex transition-colors cursor-pointer bg-blue-500 hover:bg-blue-600">
-                <div  className="w-8 h-8 rounded-full overflow-hidden bg-secondary border-white border-2">
+          {convStatus === 'connected' ? (
+            <div className="fixed max-w-[300px] bottom-4 right-4 p-4 rounded-lg shadow-lg flex flex-col items-center gap-2 transition-colors cursor-pointer bg-gradient-to-r from-indigo-500 to-indigo-800 wave-animation">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full overflow-hidden bg-secondary border-white border-2">
                   <img
                     src={character.avatarUrl}
                     alt={character.name}
@@ -209,11 +171,51 @@ export function VoiceAssistant() {
                   />
                 </div>
                 <span className="text-sm font-medium">
-                  Talk to {character.name}
+                  Talking to {character.name}
                 </span>
               </div>
-            )
-          }
+              <div
+                ref={chatContainerRef}
+                className="chat-container mt-4 w-full max-h-64 overflow-y-auto bg-secondary rounded-lg p-2 min-h-64"
+              >
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`${msg.source === 'ai' ? 'bg-gray-600 mr-12' : 'bg-indigo-600 ml-12'} p-2 rounded-lg mb-2`}
+                  >
+                    {msg.message}
+                  </div>
+                ))}
+                {messages.length > 0 && messages[messages.length - 1].source === 'user' && (
+                  <div className="bg-gray-600 p-2 rounded-lg mb-2 animate-pulse w-8">
+                    ...
+                  </div>
+                )}
+              </div>
+              <button
+                className="mt-2 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 ml-auto"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  endConversation();
+                }}
+              >
+                End Conversation
+              </button>
+            </div>
+          ) : (
+            <div onClick={startConversation} className="flex items-center gap-2 fixed max-w-[300px] bottom-4 right-4 p-4 rounded-lg shadow-lg flex transition-colors cursor-pointer bg-blue-500 hover:bg-blue-600">
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-secondary border-white border-2">
+                <img
+                  src={character.avatarUrl}
+                  alt={character.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <span className="text-sm font-medium">
+                Talk to {character.name}
+              </span>
+            </div>
+          )}
         </div>
       )}
     </>
