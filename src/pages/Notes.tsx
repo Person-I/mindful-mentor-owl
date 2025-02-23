@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Note } from "@/types/note";
@@ -10,9 +11,10 @@ import NotesList from "@/components/NotesList";
 import { useUser } from "@/context/UserIDContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CVAnalyzer from "@/components/CVAnalyzer";
-import { FileText, FileSearch } from 'lucide-react';
+import { FileText, FileSearch, Calendar } from 'lucide-react';
 import axios from 'axios';
 import { API_URL } from '@/api';
+import { CalendarView } from "@/components/CalendarView";
 
 interface CVAnalysis {
   id: number;
@@ -209,6 +211,10 @@ const Notes = () => {
             <FileSearch className="w-4 h-4" />
             CV Analyzer
           </TabsTrigger>
+          <TabsTrigger value="calendar" className="flex items-center gap-2">
+            <Calendar className="w-4 h-4" />
+            Calendar
+          </TabsTrigger>
         </TabsList>
 
         <div className="flex-1 relative">
@@ -250,6 +256,10 @@ const Notes = () => {
               isLoading={isLoadingCV}
               onAnalysisComplete={fetchCVAnalysis}
             />
+          </TabsContent>
+
+          <TabsContent value="calendar" className="absolute inset-0">
+            <CalendarView userId={userId} />
           </TabsContent>
         </div>
       </Tabs>
