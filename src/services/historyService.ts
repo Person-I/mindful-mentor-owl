@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import { Talk, CreateTalkInput, UpdateTalkInput } from "@/types/talk";
 import { API_URL } from "@/api";
@@ -17,7 +16,8 @@ export const historyService = {
       const response = await axios.get(`${API_URL}conversations/`, {
         params: { user_id: userId },
       });
-      return response.data;
+      const xyz =  response.data.map((item: any) => ({id: item.id, created_at: item.created_at, content: JSON.parse(item.content)}));
+      return xyz;
     } catch (error) {
       handleApiError(error);
     }
@@ -28,16 +28,19 @@ export const historyService = {
       const response = await axios.get(`${API_URL}conversations/${id}/`, {
         params: { user_id: userId },
       });
-      return response.data;
+      return {
+        ...response.data,
+        content: JSON.parse(response.data.content),
+      };
     } catch (error) {
       handleApiError(error);
     }
   },
 
-  async createTalk(userId: string, data: CreateTalkInput): Promise<Talk> {
+  async createTalk(userId: string, content: string): Promise<Talk> {
     try {
       const response = await axios.post(`${API_URL}conversations/`, {
-        ...data,
+        content: content,
         user_id: userId,
       });
       return response.data;

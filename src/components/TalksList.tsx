@@ -33,7 +33,6 @@ const TalksList: React.FC<TalksListProps> = ({ talks, selectedTalkId, onDeleteTa
           onClick={() => navigate('/history/new')}
           className="p-2 hover:bg-secondary rounded-lg transition-colors"
         >
-          <PlusCircle className="w-5 h-5" />
         </button>
       </div>
       <div className="flex-1 overflow-y-auto space-y-2">
@@ -46,7 +45,7 @@ const TalksList: React.FC<TalksListProps> = ({ talks, selectedTalkId, onDeleteTa
             onClick={() => navigate(`/history/${talk.id}`)}
           >
             <div className="flex items-center justify-between">
-              <span className="truncate font-medium">{talk.title}</span>
+              {/* <span className="truncate font-medium">{talk.title}</span> */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -59,9 +58,9 @@ const TalksList: React.FC<TalksListProps> = ({ talks, selectedTalkId, onDeleteTa
             </div>
             <div className="flex items-center gap-2 mt-1 text-xs text-foreground/60">
               <Clock className="w-3 h-3" />
-              <span>{formatDate(talk.updated_at)}</span>
+              <span>{formatDate(talk.created_at)}</span>
               <MessageCircle className="w-3 h-3" />
-              <span>{talk.messages.length}</span>
+              <span>{talk.content.length}</span>
             </div>
           </div>
         ))}

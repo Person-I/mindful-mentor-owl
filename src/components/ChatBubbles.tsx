@@ -21,7 +21,7 @@ const ChatBubbles: React.FC<ChatBubblesProps> = ({ messages }) => {
       <div className="space-y-4">
         {messages.map((message) => (
           <div
-            key={message.id}
+            // key={message.id}
             className={cn(
               "flex",
               message.role === "assistant" ? "justify-start" : "justify-end"
@@ -44,7 +44,6 @@ const ChatBubbles: React.FC<ChatBubblesProps> = ({ messages }) => {
                     : "text-primary-foreground/80"
                 )}
               >
-                {formatDate(message.created_at)}
               </div>
             </div>
           </div>

@@ -120,7 +120,7 @@ const History = () => {
 
       {/* Chat Bubbles */}
       {selectedTalk ? (
-        <ChatBubbles messages={selectedTalk.messages} />
+        <ChatBubbles messages={selectedTalk.content} />
       ) : (
         <div className="flex-1 glass rounded-lg p-4 flex items-center justify-center">
           <p className="text-foreground/70">Select a conversation from history</p>

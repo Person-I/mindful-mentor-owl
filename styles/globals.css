@@ -1,0 +1,5 @@
+:root {
+  --primary: 240, 100%, 50%; /* Example: HSL values for a blue color */
+  --primary-foreground: 0, 0%, 100%; /* Example: HSL values for white */
+  /* other variables... */
+} 

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useConversation } from '@11labs/react';
@@ -17,38 +16,41 @@ export function VoiceAssistant() {
   const { selectedId } = useCharacter();
   const userId = useUser().userId;
   const [character, setCharacter] = useState<Character | null>(null);
-  const [messages, setMessages] = useState<{ message: string; source: string }[]>([
-    { message: 'Hello, how can I help you today?', source: 'ai' },
-    { message: 'I need your help to summarize my journal.', source: 'user' },
-  ]);
+  const [messages, setMessages] = useState<{ message: string; source: string }[]>([]);
+  const messagesRef = useRef(messages);
+  const [conversationHistory, setConversationHistory] = useState<string>('');
 
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
   const saveConversation = async () => {
-    try {
-      const formattedMessages = messages.map((msg, index) => ({
-        id: `msg-${index}`,
-        content: msg.message,
-        role: msg.source === 'ai' ? 'assistant' : 'user',
-        created_at: new Date().toISOString(),
-      }));
+    console.log(`Saving conversation: ${messagesRef.current.length}`);
+    if (messagesRef.current.length > 0) {
+      try {
+        let formattedMessages = JSON.stringify(
+          messagesRef.current.map((msg, index) => ({
+            content: msg.message,
+            role: msg.source === 'ai' ? 'assistant' : 'user',
+          }))
+        );
 
-      await historyService.createTalk(userId, {
-        title: `Conversation with ${character?.name || 'AI'} ${new Date().toLocaleString()}`,
-        messages: formattedMessages,
-      });
+        await historyService.createTalk(userId, formattedMessages);
 
-      toast({
-        title: "Conversation saved",
-        description: "Your conversation has been saved to history.",
-      });
-    } catch (error) {
-      console.error('Failed to save conversation:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save conversation to history.",
-        variant: "destructive",
-      });
+        toast({
+          title: "Conversation saved",
+          description: "Your conversation has been saved to history.",
+        });
+      } catch (error) {
+        console.error('Failed to save conversation:', error);
+        toast({
+          title: "Error",
+          description: "Failed to save conversation to history.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -58,12 +60,10 @@ export function VoiceAssistant() {
     },
     onDisconnect: () => {
       console.log('Disconnected');
-      if (messages.length > 0) {
-        saveConversation();
-      }
+      saveConversation();
     },
     onMessage: (message) => {
-      console.log('Message:', message);
+      console.log(`Messages: ${messages.length}`);
       setMessages((prevMessages) => [...prevMessages, message]);
     },
     onError: (error) => {
@@ -91,18 +91,38 @@ export function VoiceAssistant() {
     }
   }, [messages]);
 
+  useEffect(() => {
+    const fetchConversationHistory = async () => {
+      try {
+        if (userId){
+          const talks = await historyService.getTalks(userId);
+          const formattedHistory = talks.map(talk => {
+            const dateHeader = `Conversation started on: ${new Date(talk.created_at).toLocaleString()}`;
+            const messages = talk.content.map((msg: { content: string, role: string }) => `${msg.role.toUpperCase()}: ${msg.content}`).join('\n');
+            return `${dateHeader}\n${messages}`;
+          }).join('\n\n');
+          setConversationHistory(formattedHistory);
+        }
+       
+      } catch (error) {
+        console.error('Failed to fetch conversation history:', error);
+      }
+    };
+
+    fetchConversationHistory();
+  }, [userId]);
+
   const startConversation = useCallback(async () => {
     try {
       if (convStatus !== 'connected') {
         await navigator.mediaDevices.getUserMedia({ audio: true });
-        console.log(character);
         setMessages([]);
         await conversation.startSession({
           agentId: 'BoXuSDsm0Qq78Gp3aMFA',
           dynamicVariables: {
             agent_name: character.name,
             keyFeatures: character.keyFeatures.join(', '),
-            context: 'Yesterday I had a meeting with very important VC investor.',
+            context: `Previous conversations:\n${conversationHistory}`,
             user_id: userId
           },
           overrides: {
@@ -116,7 +136,7 @@ export function VoiceAssistant() {
       console.error('Failed to toggle conversation:', error);
       toast({ title: 'Error', description: `Failed to toggle conversation.\n ${error.reason}` });
     }
-  }, [conversation, toast, character, userId]);
+  }, [conversation, toast, character, userId, conversationHistory]);
 
   const endConversation = useCallback(async () => {
     if (convStatus === 'connected') {
@@ -131,7 +151,7 @@ export function VoiceAssistant() {
           {
             convStatus === 'connected' ? (
               <div
-                className="fixed max-w-[300px] bottom-4 right-4 p-4 rounded-lg shadow-lg flex flex-col items-center gap-2 transition-colors cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 wave-animation"
+                className="fixed max-w-[300px] bottom-4 right-4 p-4 rounded-lg shadow-lg flex flex-col items-center gap-2 transition-colors cursor-pointer bg-gradient-to-r from-indigo-500 to-indigo-800 wave-animation"
               >
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full overflow-hidden bg-secondary border-white border-2">
