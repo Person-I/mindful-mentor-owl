@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Upload } from 'lucide-react';
+import { Upload, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { API_URL } from '@/api';
 import axios from 'axios';
@@ -104,14 +104,17 @@ const CVAnalyzer = ({ existingAnalysis, isLoading, onAnalysisComplete }: CVAnaly
   if (isLoading) {
     return (
       <div className="flex-1 glass rounded-lg p-8 flex items-center justify-center">
-        <div className="text-foreground/60">Loading...</div>
+        <div className="flex items-center gap-2 text-foreground/60">
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Loading...
+        </div>
       </div>
     );
   }
 
   if (existingAnalysis) {
     return (
-      <div className="flex-1 glass rounded-lg p-8">
+      <div className="flex-1 glass rounded-lg p-8 animate-fade-down">
         <h2 className="text-2xl font-semibold mb-6">Your CV Analysis</h2>
         <div className="space-y-6">
           <div className="text-sm text-foreground/60">
@@ -140,8 +143,8 @@ const CVAnalyzer = ({ existingAnalysis, isLoading, onAnalysisComplete }: CVAnaly
     <div className="flex-1 glass rounded-lg p-8">
       <h2 className="text-2xl font-semibold mb-6">CV Analyzer</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg p-12">
-          <Upload className="w-12 h-12 text-foreground/60 mb-4" />
+        <div className={`flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg p-12 transition-opacity ${isUploading ? 'opacity-50' : 'opacity-100'}`}>
+          <Upload className={`w-12 h-12 text-foreground/60 mb-4 ${isUploading ? 'animate-pulse' : ''}`} />
           <div className="flex flex-col gap-4 items-center">
             <label className="block text-center">
               <span className="bg-primary text-primary-foreground px-4 py-2 rounded-lg cursor-pointer hover:bg-primary/90 transition-colors">
@@ -152,12 +155,14 @@ const CVAnalyzer = ({ existingAnalysis, isLoading, onAnalysisComplete }: CVAnaly
                 className="hidden"
                 accept="application/pdf"
                 onChange={handleFileChange}
+                disabled={isUploading}
               />
             </label>
             <button
               type="button"
               onClick={handleUseExample}
               className="text-primary hover:text-primary/90 transition-colors"
+              disabled={isUploading}
             >
               or use example CV
             </button>
@@ -171,13 +176,20 @@ const CVAnalyzer = ({ existingAnalysis, isLoading, onAnalysisComplete }: CVAnaly
         <button
           type="submit"
           disabled={!file || isUploading}
-          className={`w-full py-2 px-4 rounded-lg transition-colors ${
+          className={`w-full py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 ${
             !file || isUploading
               ? "bg-secondary text-secondary-foreground cursor-not-allowed"
               : "bg-primary text-primary-foreground hover:bg-primary/90"
           }`}
         >
-          {isUploading ? "Analyzing..." : "Analyze CV"}
+          {isUploading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Analyzing...
+            </>
+          ) : (
+            "Analyze CV"
+          )}
         </button>
       </form>
     </div>
