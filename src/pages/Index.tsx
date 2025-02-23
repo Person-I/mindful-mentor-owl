@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { ArrowRight, Brain, Sparkles, Target } from "lucide-react";
@@ -13,8 +12,11 @@ const Index = () => {
         transition={{ duration: 0.5 }}
         className="text-center space-y-6"
       >
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight gradient-heading">
-          <span className="text-indigo-400">PersonAI </span><br/>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+          <span className="bg-gradient-to-r from-indigo-400 to-purple-600 bg-clip-text text-transparent">
+            PersonAI
+          </span>
+          <br/>
           Your Personal AI Mentor
         </h1>
         <p className="text-lg md:text-xl text-foreground/80 max-w-2xl">
