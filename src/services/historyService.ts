@@ -14,7 +14,7 @@ const handleApiError = (error: any) => {
 export const historyService = {
   async getTalks(userId: string): Promise<Talk[]> {
     try {
-      const response = await axios.get(`${API_URL}talks/`, {
+      const response = await axios.get(`${API_URL}conversations/`, {
         params: { user_id: userId },
       });
       return response.data;
@@ -25,7 +25,7 @@ export const historyService = {
 
   async getTalk(userId: string, id: string): Promise<Talk> {
     try {
-      const response = await axios.get(`${API_URL}talks/${id}/`, {
+      const response = await axios.get(`${API_URL}conversations/${id}/`, {
         params: { user_id: userId },
       });
       return response.data;
@@ -36,7 +36,7 @@ export const historyService = {
 
   async createTalk(userId: string, data: CreateTalkInput): Promise<Talk> {
     try {
-      const response = await axios.post(`${API_URL}talks/`, {
+      const response = await axios.post(`${API_URL}conversations/`, {
         ...data,
         user_id: userId,
       });
@@ -48,7 +48,7 @@ export const historyService = {
 
   async updateTalk(userId: string, id: string, data: UpdateTalkInput): Promise<Talk> {
     try {
-      const response = await axios.put(`${API_URL}talks/${id}/`, {
+      const response = await axios.put(`${API_URL}conversations/${id}/`, {
         ...data,
         user_id: userId,
       });
@@ -60,7 +60,9 @@ export const historyService = {
 
   async deleteTalk(userId: string, id: string): Promise<void> {
     try {
-      await axios.delete(`${API_URL}talks/${id}/?user_id=${userId}`);
+      await axios.delete(`${API_URL}conversations/${id}/`, {
+        params: { user_id: userId },
+      });
     } catch (error) {
       handleApiError(error);
     }
