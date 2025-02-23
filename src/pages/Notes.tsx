@@ -254,7 +254,7 @@ const Notes = () => {
         </div>
       </Tabs>
 
-      <VoiceAssistant cvAnalysis={cvAnalysis} />
+      <VoiceAssistant />
     </div>
   );
 };
