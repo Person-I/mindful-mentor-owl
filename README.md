@@ -1,69 +1,90 @@
-# Welcome to your Lovable project
 
-## Project info
+# PersonAI - Your AI Mentor Platform
 
-**URL**: https://lovable.dev/projects/ca58cf69-bf50-46ca-b826-8950a5477652
+PersonAI is an innovative web application developed during a hackathon that combines CV analysis and AI mentorship to provide personalized career guidance and professional development support.
 
-## How can I edit this code?
+## 🎯 Project Goals
 
-There are several ways of editing your application.
+- Provide automated CV analysis with AI-powered insights
+- Offer interactive mentorship through AI characters with different expertise
+- Create a knowledge base for storing and managing career-related notes
+- Enable voice-based conversations with AI mentors for natural interaction
+- Track conversation history for continued guidance and reference
 
-**Use Lovable**
+## 🚀 Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ca58cf69-bf50-46ca-b826-8950a5477652) and start prompting.
+- **CV Analysis**: Upload and analyze CVs with AI to get detailed insights and summaries
+- **AI Mentors**: Choose from different mentor personalities tailored to various career paths
+- **Voice Interaction**: Natural voice-based conversations with AI mentors
+- **Knowledge Base**: Create and manage notes from mentorship sessions
+- **Conversation History**: Track and review past interactions with mentors
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠 Technologies Used
 
-**Use your preferred IDE**
+- **Frontend Framework**: React with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Voice Integration**: ElevenLabs API
+- **State Management**: React Query
+- **Icons**: Lucide React
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 📦 Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Make sure you have Node.js installed on your system. Then follow these steps:
 
-Follow these steps:
+```bash
+# Clone the repository
+git clone <your-repo-url>
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Navigate to project directory
+cd personai
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🔑 Environment Setup
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Create a `.env` file in the root directory with the following variables:
 
-**Use GitHub Codespaces**
+```env
+ELEVEN_LABS_API_KEY=your_eleven_labs_key
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📝 API Keys Required
 
-## What technologies are used for this project?
+To use all features of PersonAI, you'll need:
 
-This project is built with .
+- ElevenLabs API key for voice interaction
+- Backend API endpoint configuration (if applicable)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🌐 Development
 
-## How can I deploy this project?
+The application will be available at `http://localhost:8080` after starting the development server.
 
-Simply open [Lovable](https://lovable.dev/projects/ca58cf69-bf50-46ca-b826-8950a5477652) and click on Share -> Publish.
+## 🏗 Project Structure
 
-## I want to use a custom domain - is that possible?
+```
+personai/
+├── public/
+├── src/
+│   ├── components/
+│   ├── context/
+│   ├── hooks/
+│   ├── pages/
+│   ├── services/
+│   └── types/
+└── package.json
+```
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## 🤝 Contributing
+
+This project was developed during a hackathon, but we welcome contributions! Please feel free to submit issues and pull requests.
+
+## 📄 License
+
+This project is open source and available under the MIT license.
