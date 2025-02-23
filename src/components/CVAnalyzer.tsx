@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -59,38 +58,36 @@ const CVAnalyzer = () => {
     if (!file) return;
 
     setIsUploading(true);
-    const reader = new FileReader();
 
-    reader.onload = async () => {
-      const base64String = (reader.result as string).split(',')[1];
-      
-      try {
-        const response = await axios.post(`${API_URL}analyze-pdf/`, {
-          file: base64String,
-          user_id: userId
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('user_id', userId);
+
+    try {
+        const response = await axios.post(`${API_URL}analyze-pdf/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         });
 
         toast({
-          title: "Success",
-          description: "CV uploaded and analyzed successfully",
+            title: "Success",
+            description: "CV uploaded and analyzed successfully",
         });
 
         // Fetch the updated analysis
         const analysisResponse = await axios.get(`${API_URL}cv-analysis/?user_id=${userId}`);
         setExistingAnalysis(analysisResponse.data);
         setFile(null);
-      } catch (error) {
+    } catch (error) {
         toast({
-          title: "Error",
-          description: "Failed to analyze CV",
-          variant: "destructive",
+            title: "Error",
+            description: "Failed to analyze CV",
+            variant: "destructive",
         });
-      } finally {
+    } finally {
         setIsUploading(false);
-      }
-    };
-
-    reader.readAsDataURL(file);
+    }
   };
 
   const formatDate = (dateString: string) => {
