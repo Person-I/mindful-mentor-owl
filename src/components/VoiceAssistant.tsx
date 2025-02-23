@@ -157,7 +157,7 @@ export function VoiceAssistant() {
   return (
     <>
       {character && (
-        <div className="">
+        <div className="relative z-50">
           {convStatus === 'connected' ? (
             <div className="fixed max-w-[300px] bottom-4 right-4 p-4 rounded-lg shadow-lg flex flex-col items-center gap-2 transition-colors cursor-pointer bg-gradient-to-r from-indigo-500 to-indigo-800 wave-animation">
               <div className="flex items-center gap-2">
