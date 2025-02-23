@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Note } from "@/types/note";
@@ -12,6 +11,16 @@ import { useUser } from "@/context/UserIDContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CVAnalyzer from "@/components/CVAnalyzer";
 import { FileText, FileSearch } from 'lucide-react';
+import axios from 'axios';
+import { API_URL } from '@/api';
+
+interface CVAnalysis {
+  id: number;
+  user_id: string;
+  summary: string;
+  text: string;
+  created_at: string;
+}
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -23,12 +32,27 @@ const Notes = () => {
   const { toast } = useToast();
   const [isListVisible, setIsListVisible] = useState(true);
   const userId = useUser().userId;
+  const [cvAnalysis, setCvAnalysis] = useState<CVAnalysis | null>(null);
+  const [isLoadingCV, setIsLoadingCV] = useState(true);
 
   useEffect(() => {
     if (userId) {
       loadNotes();
+      fetchCVAnalysis();
     }
   }, [userId]);
+
+  const fetchCVAnalysis = async () => {
+    try {
+      setIsLoadingCV(true);
+      const response = await axios.get(`${API_URL}cv-analysis/?user_id=${userId}`);
+      setCvAnalysis(response.data);
+    } catch (error) {
+      console.error('Failed to fetch CV analysis:', error);
+    } finally {
+      setIsLoadingCV(false);
+    }
+  };
 
   useEffect(() => {
     if (noteId) {
@@ -171,7 +195,6 @@ const Notes = () => {
     });
   };
 
-
   return (
     <div className="h-[calc(100vh-5rem)] flex flex-col gap-4">
       <Toaster />
@@ -191,7 +214,6 @@ const Notes = () => {
         <div className="flex-1 relative">
           <TabsContent value="notes" className="absolute inset-0">
             <div className="h-full flex flex-col md:flex-row gap-4">
-              {/* Toggle button for mobile */}
               <button
                 className="md:hidden p-2 bg-primary text-primary-foreground rounded-lg"
                 onClick={() => setIsListVisible(!isListVisible)}
@@ -206,7 +228,6 @@ const Notes = () => {
                 isVisible={isListVisible}
               />
 
-              {/* Editor */}
               {selectedNote ? (
                 <NoteEditor
                   note={selectedNote}
@@ -224,12 +245,16 @@ const Notes = () => {
           </TabsContent>
 
           <TabsContent value="cv-analyzer" className="absolute inset-0">
-            <CVAnalyzer />
+            <CVAnalyzer 
+              existingAnalysis={cvAnalysis}
+              isLoading={isLoadingCV}
+              onAnalysisComplete={fetchCVAnalysis}
+            />
           </TabsContent>
         </div>
       </Tabs>
 
-      <VoiceAssistant />
+      <VoiceAssistant cvAnalysis={cvAnalysis} />
     </div>
   );
 };

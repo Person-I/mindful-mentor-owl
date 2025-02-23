@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+
+import { useState } from 'react';
 import { Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { API_URL } from '@/api';
@@ -13,30 +14,17 @@ interface CVAnalysis {
   created_at: string;
 }
 
-const CVAnalyzer = () => {
+interface CVAnalyzerProps {
+  existingAnalysis: CVAnalysis | null;
+  isLoading: boolean;
+  onAnalysisComplete: () => void;
+}
+
+const CVAnalyzer = ({ existingAnalysis, isLoading, onAnalysisComplete }: CVAnalyzerProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [existingAnalysis, setExistingAnalysis] = useState<CVAnalysis | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const { userId } = useUser();
-
-  useEffect(() => {
-    const fetchExistingAnalysis = async () => {
-      try {
-        const response = await axios.get(`${API_URL}cv-analysis/?user_id=${userId}`);
-        setExistingAnalysis(response.data);
-      } catch (error) {
-        console.error('Failed to fetch existing CV analysis:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (userId) {
-      fetchExistingAnalysis();
-    }
-  }, [userId]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -75,9 +63,7 @@ const CVAnalyzer = () => {
             description: "CV uploaded and analyzed successfully",
         });
 
-        // Fetch the updated analysis
-        const analysisResponse = await axios.get(`${API_URL}cv-analysis/?user_id=${userId}`);
-        setExistingAnalysis(analysisResponse.data);
+        onAnalysisComplete();
         setFile(null);
     } catch (error) {
         toast({
