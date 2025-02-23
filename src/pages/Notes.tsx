@@ -257,7 +257,6 @@ const Notes = () => {
               onAnalysisComplete={fetchCVAnalysis}
             />
           </TabsContent>
-
           <TabsContent value="calendar" className="absolute inset-0">
             <CalendarView userId={userId} />
           </TabsContent>
