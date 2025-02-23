@@ -1,31 +1,70 @@
+
 'use client';
 
 import { useConversation } from '@11labs/react';
 import { useCallback, useState, useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Mic, MicOff } from 'lucide-react';
-import './VoiceAssistant.css'; // Import the CSS file for styles
-import { characters } from '@/data/characters'; // Import the characters array
-import { useCharacter } from '@/context/CharacterContext'; // Import the useCharacter hook
+import './VoiceAssistant.css';
+import { characters } from '@/data/characters';
+import { useCharacter } from '@/context/CharacterContext';
 import { Character } from '@/types/character';
 import { useUser } from '@/context/UserIDContext';
+import { historyService } from '@/services/historyService';
 
 export function VoiceAssistant() {
   const { toast } = useToast();
-  const { selectedId } = useCharacter(); // Use the useCharacter hook to get selectedId
+  const { selectedId } = useCharacter();
+  const userId = useUser().userId;
+  const [character, setCharacter] = useState<Character | null>(null);
+  const [messages, setMessages] = useState<{ message: string; source: string }[]>([
+    { message: 'Hello, how can I help you today?', source: 'ai' },
+    { message: 'I need your help to summarize my journal.', source: 'user' },
+  ]);
+
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const saveConversation = async () => {
+    try {
+      const formattedMessages = messages.map((msg, index) => ({
+        id: `msg-${index}`,
+        content: msg.message,
+        role: msg.source === 'ai' ? 'assistant' : 'user',
+        created_at: new Date().toISOString(),
+      }));
+
+      await historyService.createTalk(userId, {
+        title: `Conversation with ${character?.name || 'AI'} ${new Date().toLocaleString()}`,
+        messages: formattedMessages,
+      });
+
+      toast({
+        title: "Conversation saved",
+        description: "Your conversation has been saved to history.",
+      });
+    } catch (error) {
+      console.error('Failed to save conversation:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save conversation to history.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const conversation = useConversation({
-    // onConnect: () => {
-    //   console.log('Connected');
-    //   toast({ title: 'Connected', description: 'You are now connected to the agent.' });
-    // },
-    // onDisconnect: () => {
-    //   console.log('Disconnected');
-    //   toast({ title: 'Disconnected', description: 'You have been disconnected from the agent.' });
-    // },
+    onConnect: () => {
+      console.log('Connected');
+    },
+    onDisconnect: () => {
+      console.log('Disconnected');
+      if (messages.length > 0) {
+        saveConversation();
+      }
+    },
     onMessage: (message) => {
       console.log('Message:', message);
       setMessages((prevMessages) => [...prevMessages, message]);
-      // toast({ title: 'New Message', description: `Message received: ${message}` });
     },
     onError: (error) => {
       console.error('Error:', error);
@@ -33,16 +72,6 @@ export function VoiceAssistant() {
     },
   });
   const convStatus = conversation.status;
-  const userId = useUser().userId;
-  console.log(userId);
-
-  const [character, setCharacter] = useState<Character | null>(null);
-  const [messages, setMessages] = useState<{ message: string; source: string }[]>([
-    { message: 'Hello, how can I help you today?', source: 'ai' },
-    { message: 'I need your help to summarize my journal.', source: 'user' },
-  ]);
-
-  const chatContainerRef = useRef<HTMLDivElement | null>(null); // Create a ref for the chat container
 
   useEffect(() => {
     if (selectedId) {
@@ -51,25 +80,23 @@ export function VoiceAssistant() {
         setCharacter(selectedCharacter);
       }
     }
-  }, [selectedId]); // Add selectedId as a dependency
+  }, [selectedId]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
         top: chatContainerRef.current.scrollHeight,
-        behavior: 'smooth', // Add smooth scrolling
+        behavior: 'smooth',
       });
     }
-  }, [messages]); // Add messages as a dependency
+  }, [messages]);
 
   const startConversation = useCallback(async () => {
     try {
       if (convStatus !== 'connected') {
-        // Request microphone permission
         await navigator.mediaDevices.getUserMedia({ audio: true });
         console.log(character);
         setMessages([]);
-        // Start the conversation with your agent
         await conversation.startSession({
           agentId: 'BoXuSDsm0Qq78Gp3aMFA',
           dynamicVariables: {
@@ -89,13 +116,13 @@ export function VoiceAssistant() {
       console.error('Failed to toggle conversation:', error);
       toast({ title: 'Error', description: `Failed to toggle conversation.\n ${error.reason}` });
     }
-  }, [conversation, toast]);
+  }, [conversation, toast, character, userId]);
 
   const endConversation = useCallback(async () => {
     if (convStatus === 'connected') {
       await conversation.endSession();
     }
-  }, [conversation]);
+  }, [conversation, convStatus]);
 
   return (
     <>
@@ -120,7 +147,7 @@ export function VoiceAssistant() {
                 </div>
                 {(
                   <div
-                    ref={chatContainerRef} // Attach the ref to the chat container
+                    ref={chatContainerRef}
                     className="chat-container mt-4 w-full max-h-64 overflow-y-auto bg-secondary rounded-lg p-2 min-h-64"
                   >
                     {messages.map((msg, index) => (
@@ -144,7 +171,7 @@ export function VoiceAssistant() {
                   <button
                     className="mt-2 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 ml-auto"
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent triggering startConversation
+                      e.stopPropagation();
                       endConversation();
                     }}
                   >
