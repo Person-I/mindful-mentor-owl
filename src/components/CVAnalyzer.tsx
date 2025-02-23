@@ -116,16 +116,16 @@ const CVAnalyzer = () => {
           <div className="text-sm text-foreground/60">
             Analyzed on: {formatDate(existingAnalysis.created_at)}
           </div>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-medium mb-2">Summary</h3>
-              <div className="bg-secondary/50 rounded-lg p-4">
+          <div className="flex space-x-4">
+            <div className="flex-1">
+              <h3 className="text-lg font-medium mb-2">AI Summary</h3>
+              <div className="bg-secondary/50 rounded-lg p-4 whitespace-pre-wrap">
                 {existingAnalysis.summary}
               </div>
             </div>
-            <div>
+            <div className="flex-1">
               <h3 className="text-lg font-medium mb-2">Full Text</h3>
-              <div className="bg-secondary/50 rounded-lg p-4 max-h-96 overflow-y-auto">
+              <div className="bg-secondary/50 rounded-lg p-4 max-h-96 overflow-y-auto whitespace-pre-wrap">
                 {existingAnalysis.text}
               </div>
             </div>
