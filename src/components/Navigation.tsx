@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MessageCircle, Home, StickyNote, Users } from "lucide-react";
+import { MessageCircle, Home, StickyNote, Users, History } from "lucide-react";
 import { useState } from "react";
 import { useUser } from "@/context/UserIDContext";
 
@@ -34,6 +34,12 @@ export const Navigation = () => {
               label="Knowledge Base" 
               active={location.pathname.startsWith("/knowledge-base")} 
             />
+            <NavLink 
+              to="/history" 
+              icon={<History className="w-5 h-5" />} 
+              label="History" 
+              active={location.pathname.startsWith("/history")} 
+            />
           </div>
         </div>
         
@@ -47,6 +53,13 @@ export const Navigation = () => {
                 icon={<StickyNote className="w-5 h-5" />} 
                 label="Knowledge Base" 
                 active={location.pathname.startsWith("/knowledge-base")} 
+                onClick={() => setIsMenuOpen(false)}
+              />
+              <NavLink 
+                to="/history" 
+                icon={<History className="w-5 h-5" />} 
+                label="History" 
+                active={location.pathname.startsWith("/history")} 
                 onClick={() => setIsMenuOpen(false)}
               />
             </div>
@@ -80,3 +93,5 @@ const NavLink = ({ to, icon, label, active, onClick }: NavLinkProps) => (
     )}
   </Link>
 );
+
+export default Navigation;

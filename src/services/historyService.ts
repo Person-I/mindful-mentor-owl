@@ -1,0 +1,68 @@
+
+import axios from 'axios';
+import { Talk, CreateTalkInput, UpdateTalkInput } from "@/types/talk";
+import { API_URL } from "@/api";
+
+const handleApiError = (error: any) => {
+  if (error.response) {
+    throw new Error(error.response.data.message || "API Error");
+  } else {
+    throw new Error("Network Error");
+  }
+};
+
+export const historyService = {
+  async getTalks(userId: string): Promise<Talk[]> {
+    try {
+      const response = await axios.get(`${API_URL}talks/`, {
+        params: { user_id: userId },
+      });
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async getTalk(userId: string, id: string): Promise<Talk> {
+    try {
+      const response = await axios.get(`${API_URL}talks/${id}/`, {
+        params: { user_id: userId },
+      });
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async createTalk(userId: string, data: CreateTalkInput): Promise<Talk> {
+    try {
+      const response = await axios.post(`${API_URL}talks/`, {
+        ...data,
+        user_id: userId,
+      });
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async updateTalk(userId: string, id: string, data: UpdateTalkInput): Promise<Talk> {
+    try {
+      const response = await axios.put(`${API_URL}talks/${id}/`, {
+        ...data,
+        user_id: userId,
+      });
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async deleteTalk(userId: string, id: string): Promise<void> {
+    try {
+      await axios.delete(`${API_URL}talks/${id}/?user_id=${userId}`);
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+};
