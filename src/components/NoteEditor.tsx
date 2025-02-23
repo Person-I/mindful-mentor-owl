@@ -46,7 +46,7 @@ const NoteEditor = ({ note, content, hasChanges, onContentChange, onSave }: Note
           value={content}
           onChange={(val) => onContentChange(val || "")}
           preview="edit"
-          className="h-full"
+          className="h-full min-h-[300px]"
         />
       </div>
     </div>

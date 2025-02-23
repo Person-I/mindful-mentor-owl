@@ -22,7 +22,7 @@ export const characters: Character[] = [
     name: "Steve Jobs",
     role: "Academic Advisor",
     avatarUrl: "/mentor_c.jpeg",
-    voiceId: "ljo9gAlSqKOvF6D8sOsX",
+    voiceId: "vNm4u40hTe4NQoRG82Bs",
     keyFeatures: ["Inspiring", "Psychology-oriented", "Goal focused"],
   },
 ]; 
