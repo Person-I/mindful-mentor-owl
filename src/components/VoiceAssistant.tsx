@@ -19,11 +19,7 @@ interface CVAnalysis {
   created_at: string;
 }
 
-interface VoiceAssistantProps {
-  cvAnalysis: CVAnalysis | null;
-}
-
-export function VoiceAssistant({ cvAnalysis }: VoiceAssistantProps) {
+export function VoiceAssistant() {
   const { toast } = useToast();
   const { selectedId } = useCharacter();
   const userId = useUser().userId;
@@ -134,7 +130,7 @@ export function VoiceAssistant({ cvAnalysis }: VoiceAssistantProps) {
           dynamicVariables: {
             agent_name: character.name,
             keyFeatures: character.keyFeatures.join(', '),
-            context: `Previous conversations:\n${conversationHistory}\n${cvAnalysis ? `CV Analysis:\n${cvAnalysis.summary}` : ''}`,
+            context: `Previous conversations:\n${conversationHistory}`,
             user_id: userId
           },
           overrides: {
@@ -148,7 +144,7 @@ export function VoiceAssistant({ cvAnalysis }: VoiceAssistantProps) {
       console.error('Failed to toggle conversation:', error);
       toast({ title: 'Error', description: `Failed to toggle conversation.\n ${error.reason}` });
     }
-  }, [conversation, toast, character, userId, conversationHistory, cvAnalysis]);
+  }, [conversation, toast, character, userId, conversationHistory]);
 
   const endConversation = useCallback(async () => {
     if (convStatus === 'connected') {

@@ -17,7 +17,7 @@ export const Navigation = () => {
           <Link to="/" className="text-xl font-semibold text-primary hover:text-primary/90 transition-colors">
             PersonAI
           </Link>
-          {userId.userId}
+          {/* {userId.userId} */}
           <button
             className="block md:hidden text-xl"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
