@@ -67,7 +67,7 @@ interface NavLinkProps {
 
 const NavLink = ({ to, icon, label, active, onClick }: NavLinkProps) => (
   <Link to={to} className="relative group" onClick={onClick}>
-    <div className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors hover:bg-secondary">
+    <div className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors hover:bg-primary/10 text-foreground/80 hover:text-primary ${active ? 'bg-primary/15 text-primary' : ''}`}>
       {icon}
       <span>{label}</span>
     </div>
