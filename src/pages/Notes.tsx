@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Note } from "@/types/note";
@@ -8,6 +9,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
 import NotesList from "@/components/NotesList";
 import { useUser } from "@/context/UserIDContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CVAnalyzer from "@/components/CVAnalyzer";
+import { FileText, FileSearch } from 'lucide-react';
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -169,38 +173,57 @@ const Notes = () => {
 
 
   return (
-    <div className="h-[calc(100vh-5rem)] flex flex-col md:flex-row gap-4">
+    <div className="h-[calc(100vh-5rem)] flex flex-col gap-4">
       <Toaster />
 
-      {/* Toggle button for mobile */}
-      <button
-        className="md:hidden p-2 bg-primary text-primary-foreground rounded-lg"
-        onClick={() => setIsListVisible(!isListVisible)}
-      >
-        {isListVisible ? 'Hide Notes' : 'Show Notes'}
-      </button>
+      <Tabs defaultValue="notes" className="flex-1 flex flex-col">
+        <TabsList>
+          <TabsTrigger value="notes" className="flex items-center gap-2">
+            <FileText className="w-4 h-4" />
+            Notes
+          </TabsTrigger>
+          <TabsTrigger value="cv-analyzer" className="flex items-center gap-2">
+            <FileSearch className="w-4 h-4" />
+            CV Analyzer
+          </TabsTrigger>
+        </TabsList>
 
-      <NotesList
-        notes={notes}
-        selectedNoteId={selectedNote?.id || null}
-        onDeleteNote={deleteNote}
-        isVisible={isListVisible}
-      />
+        <TabsContent value="notes" className="flex-1 flex flex-col md:flex-row gap-4">
+          {/* Toggle button for mobile */}
+          <button
+            className="md:hidden p-2 bg-primary text-primary-foreground rounded-lg"
+            onClick={() => setIsListVisible(!isListVisible)}
+          >
+            {isListVisible ? 'Hide Notes' : 'Show Notes'}
+          </button>
 
-      {/* Editor */}
-      {selectedNote ? (
-        <NoteEditor
-          note={selectedNote}
-          content={content}
-          hasChanges={hasChanges}
-          onContentChange={setContent}
-          onSave={updateNote}
-        />
-      ) : (
-        <div className="flex-1 glass rounded-lg p-4 flex items-center justify-center">
-          <p className="text-foreground/70">Select a note or create a new one</p>
-        </div>
-      )}
+          <NotesList
+            notes={notes}
+            selectedNoteId={selectedNote?.id || null}
+            onDeleteNote={deleteNote}
+            isVisible={isListVisible}
+          />
+
+          {/* Editor */}
+          {selectedNote ? (
+            <NoteEditor
+              note={selectedNote}
+              content={content}
+              hasChanges={hasChanges}
+              onContentChange={setContent}
+              onSave={updateNote}
+            />
+          ) : (
+            <div className="flex-1 glass rounded-lg p-4 flex items-center justify-center">
+              <p className="text-foreground/70">Select a note or create a new one</p>
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="cv-analyzer" className="flex-1">
+          <CVAnalyzer />
+        </TabsContent>
+      </Tabs>
 
       <VoiceAssistant />
     </div>
