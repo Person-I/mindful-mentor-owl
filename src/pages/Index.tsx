@@ -14,6 +14,7 @@ const Index = () => {
         className="text-center space-y-6"
       >
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight gradient-heading">
+          <span className="text-indigo-400">PersonAI </span><br/>
           Your Personal AI Mentor
         </h1>
         <p className="text-lg md:text-xl text-foreground/80 max-w-2xl">

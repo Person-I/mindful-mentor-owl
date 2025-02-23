@@ -131,7 +131,9 @@ export function VoiceAssistant() {
             agent_name: character.name,
             keyFeatures: character.keyFeatures.join(', '),
             context: `Previous conversations:\n${conversationHistory}`,
-            user_id: userId
+            user_id: userId,
+            start_date: '2024-02-23',
+            end_date: '2024-03-23'
           },
           overrides: {
             tts: {
