@@ -188,41 +188,45 @@ const Notes = () => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="notes" className="flex-1 flex flex-col md:flex-row gap-4">
-          {/* Toggle button for mobile */}
-          <button
-            className="md:hidden p-2 bg-primary text-primary-foreground rounded-lg"
-            onClick={() => setIsListVisible(!isListVisible)}
-          >
-            {isListVisible ? 'Hide Notes' : 'Show Notes'}
-          </button>
+        <div className="flex-1 relative">
+          <TabsContent value="notes" className="absolute inset-0">
+            <div className="h-full flex flex-col md:flex-row gap-4">
+              {/* Toggle button for mobile */}
+              <button
+                className="md:hidden p-2 bg-primary text-primary-foreground rounded-lg"
+                onClick={() => setIsListVisible(!isListVisible)}
+              >
+                {isListVisible ? 'Hide Notes' : 'Show Notes'}
+              </button>
 
-          <NotesList
-            notes={notes}
-            selectedNoteId={selectedNote?.id || null}
-            onDeleteNote={deleteNote}
-            isVisible={isListVisible}
-          />
+              <NotesList
+                notes={notes}
+                selectedNoteId={selectedNote?.id || null}
+                onDeleteNote={deleteNote}
+                isVisible={isListVisible}
+              />
 
-          {/* Editor */}
-          {selectedNote ? (
-            <NoteEditor
-              note={selectedNote}
-              content={content}
-              hasChanges={hasChanges}
-              onContentChange={setContent}
-              onSave={updateNote}
-            />
-          ) : (
-            <div className="flex-1 glass rounded-lg p-4 flex items-center justify-center">
-              <p className="text-foreground/70">Select a note or create a new one</p>
+              {/* Editor */}
+              {selectedNote ? (
+                <NoteEditor
+                  note={selectedNote}
+                  content={content}
+                  hasChanges={hasChanges}
+                  onContentChange={setContent}
+                  onSave={updateNote}
+                />
+              ) : (
+                <div className="flex-1 glass rounded-lg p-4 flex items-center justify-center">
+                  <p className="text-foreground/70">Select a note or create a new one</p>
+                </div>
+              )}
             </div>
-          )}
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="cv-analyzer" className="flex-1">
-          <CVAnalyzer />
-        </TabsContent>
+          <TabsContent value="cv-analyzer" className="absolute inset-0">
+            <CVAnalyzer />
+          </TabsContent>
+        </div>
       </Tabs>
 
       <VoiceAssistant />
