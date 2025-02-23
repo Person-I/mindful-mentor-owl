@@ -3,7 +3,7 @@ import { Character } from "@/types/character";
 export const characters: Character[] = [
   {
     id: "1",
-    name: "Vlad Drakula",
+    name: "Henry Ford",
     role: "Technical Mentor",
     avatarUrl: "/mentor_a.jpeg",
     voiceId: "e5WNhrdI30aXpS2RSGm1",
@@ -11,7 +11,7 @@ export const characters: Character[] = [
   },
   {
     id: "2",
-    name: "Pamela Anderson",
+    name: "Coco Chanel",
     role: "Career Coach",
     avatarUrl: "/mentor_b.jpeg",
     voiceId: "56AoDkrOh6qfVPDXZ7Pt",
@@ -19,7 +19,7 @@ export const characters: Character[] = [
   },
   {
     id: "3",
-    name: "Stevenson Jobson",
+    name: "Steve Jobs",
     role: "Academic Advisor",
     avatarUrl: "/mentor_c.jpeg",
     voiceId: "ljo9gAlSqKOvF6D8sOsX",
