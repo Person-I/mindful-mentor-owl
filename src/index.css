@@ -29,11 +29,15 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-gradient-to-br from-background via-background/95 to-secondary/30 min-h-screen text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 .glass {
   @apply bg-background/50 backdrop-blur-lg border border-border/50;
+}
+
+.gradient-heading {
+  @apply bg-gradient-to-r from-primary via-primary/90 to-primary/80 bg-clip-text text-transparent;
 }

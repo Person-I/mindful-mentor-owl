@@ -1,10 +1,10 @@
+
 import React, { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { ArrowRight, Brain, Sparkles, Target } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
-
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-12">
       <motion.div
@@ -13,7 +13,7 @@ const Index = () => {
         transition={{ duration: 0.5 }}
         className="text-center space-y-6"
       >
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight gradient-heading">
           Your Personal AI Mentor
         </h1>
         <p className="text-lg md:text-xl text-foreground/80 max-w-2xl">

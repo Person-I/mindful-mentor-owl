@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MessageCircle, Home, StickyNote, Users } from "lucide-react";
@@ -10,10 +11,10 @@ export const Navigation = () => {
   const userId = useUser();
 
   return (
-    <nav className="sticky top-0 z-50 glass">
+    <nav className="sticky top-0 z-50 bg-background/50 backdrop-blur-lg border-b border-border/50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-xl font-semibold">
+          <Link to="/" className="text-xl font-semibold text-primary hover:text-primary/90 transition-colors">
             PersonAI
           </Link>
           {userId.userId}
@@ -37,7 +38,7 @@ export const Navigation = () => {
         </div>
         
         {isMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-background dark:bg-gray-800 shadow-lg border-b border-gray-300 dark:border-gray-700 md:hidden">
+          <div className="absolute top-full left-0 w-full bg-background/95 backdrop-blur-lg shadow-lg border-b border-border/50 md:hidden">
             <div className="flex flex-col items-start space-y-4 p-4">
               <NavLink to="/" icon={<Home className="w-5 h-5" />} label="Home" active={location.pathname === "/"} onClick={() => setIsMenuOpen(false)} />
               <NavLink to="/select-character" icon={<Users className="w-5 h-5" />} label="Mentors" active={location.pathname === "/select-character"} onClick={() => setIsMenuOpen(false)} />
