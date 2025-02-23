@@ -41,6 +41,21 @@ const CVAnalyzer = ({ existingAnalysis, isLoading, onAnalysisComplete }: CVAnaly
     }
   };
 
+  const handleUseExample = async () => {
+    try {
+      const response = await fetch('/example_cv.pdf');
+      const blob = await response.blob();
+      const file = new File([blob], 'example_cv.pdf', { type: 'application/pdf' });
+      setFile(file);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load example CV",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
@@ -127,17 +142,26 @@ const CVAnalyzer = ({ existingAnalysis, isLoading, onAnalysisComplete }: CVAnaly
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg p-12">
           <Upload className="w-12 h-12 text-foreground/60 mb-4" />
-          <label className="block text-center">
-            <span className="bg-primary text-primary-foreground px-4 py-2 rounded-lg cursor-pointer hover:bg-primary/90 transition-colors">
-              Select PDF File
-            </span>
-            <input
-              type="file"
-              className="hidden"
-              accept="application/pdf"
-              onChange={handleFileChange}
-            />
-          </label>
+          <div className="flex flex-col gap-4 items-center">
+            <label className="block text-center">
+              <span className="bg-primary text-primary-foreground px-4 py-2 rounded-lg cursor-pointer hover:bg-primary/90 transition-colors">
+                Select PDF File
+              </span>
+              <input
+                type="file"
+                className="hidden"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+            </label>
+            <button
+              type="button"
+              onClick={handleUseExample}
+              className="text-primary hover:text-primary/90 transition-colors"
+            >
+              or use example CV
+            </button>
+          </div>
           {file && (
             <div className="mt-4 text-foreground/60">
               Selected file: {file.name}
